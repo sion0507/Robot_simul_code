@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<robot name="diff_drive_min">
+
+  <!-- 섀시: 바닥에서 1cm 띄움(끌림 방지) -->
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0 0 0.06"/>
+      <mass value="3.0"/>
+      <inertia ixx="0.01" iyy="0.01" izz="0.02" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry><box size="0.20 0.15 0.10"/></geometry>
+      <origin xyz="0 0 0.06" rpy="0 0 0"/>
+      <material name="grey"><color rgba="0.6 0.6 0.6 1"/></material>
+    </visual>
+    <collision>
+      <geometry><box size="0.20 0.15 0.10"/></geometry>
+      <origin xyz="0 0 0.06" rpy="0 0 0"/>
+    </collision>
+  </link>
+
+  <!-- 왼쪽 바퀴: 실린더 축을 Y로 (X축 +90°) -->
+  <link name="wheel_left">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.2"/>
+      <inertia ixx="0.0002" iyy="0.0001" izz="0.0002" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry><cylinder radius="0.05" length="0.03"/></geometry>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <material name="black"><color rgba="0.1 0.1 0.1 1"/></material>
+    </visual>
+    <collision>
+      <geometry><cylinder radius="0.05" length="0.03"/></geometry>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+    </collision>
+  </link>
+
+  <!-- 오른쪽 바퀴: 동일 -->
+  <link name="wheel_right">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.2"/>
+      <inertia ixx="0.0002" iyy="0.0001" izz="0.0002" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry><cylinder radius="0.05" length="0.03"/></geometry>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <material name="black"><color rgba="0.1 0.1 0.1 1"/></material>
+    </visual>
+    <collision>
+      <geometry><cylinder radius="0.05" length="0.03"/></geometry>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+    </collision>
+  </link>
+
+  <!-- 뒤 캐스터(구슬): 조인트에서만 위치 지정 -->
+  <link name="caster">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.05"/>
+      <inertia ixx="1e-5" iyy="1e-5" izz="1e-5"/>
+    </inertial>
+    <visual>
+      <geometry><sphere radius="0.02"/></geometry>
+      <origin xyz="0 0 0.02"/>
+      <material name="white"><color rgba="0.9 0.9 0.9 1"/></material>
+    </visual>
+    <collision>
+      <geometry><sphere radius="0.02"/></geometry>
+      <origin xyz="0 0 0.02"/>
+    </collision>
+  </link>
+
+  <!-- 휠 허브: 섀시(폭 0.15) 밖으로 0.015만큼 내보냄 → y=±0.09 -->
+  <joint name="joint_wheel_left" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_left"/>
+    <origin xyz="0 0.09 0.05" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="joint_wheel_right" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_right"/>
+    <origin xyz="0 -0.09 0.05" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="joint_caster" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster"/>
+    <origin xyz="-0.08 0 0"/>
+  </joint>
+
+</robot>
